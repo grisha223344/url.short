@@ -1,0 +1,33 @@
+version: "3.1"
+services:
+  nginx:
+    image: nginx
+    container_name: url_short_nginx
+    volumes:
+      - ./:/var/www
+      - ./_docker/nginx/conf.d:/etc/nginx/conf.d
+    ports:
+      - "8088:80"
+    depends_on:
+      - app
+
+  app:
+    build: _docker/php-fpm
+    container_name: url_short_app
+    volumes:
+      - ./:/var/www
+      - ./_docker/php-fpm/php.ini:/usr/local/etc/php/conf.d/php.ini
+
+  db:
+      container_name: url_short_db
+      image: mariadb:10.5
+      restart: always
+      environment:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: url_short
+          MYSQL_USER: root
+          MYSQL_PASSWORD: root
+      volumes:
+          - ./tmp/db:/var/lib/mysql
+      ports:
+          - "9906:3306"
