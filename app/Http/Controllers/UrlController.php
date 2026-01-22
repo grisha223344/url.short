@@ -51,7 +51,7 @@ class UrlController extends Controller
             'is_commercial' => $request->is_commercial ? 1 : 0,
             'cost_per_view' => $request->is_commercial ? $request->cost_per_view : 0,
             'budget' => $request->is_commercial ? $request->budget : 0,
-            'expires_at' => Carbon::now()->addDays((int)$request->expires_in)
+            'expires_at' => $request->expires_in ? Carbon::now()->addDays((int)$request->expires_in) : null,
         ]);
 
         return redirect()->route('dashboard')->with('success', 'Ссылка успешно создана!');
@@ -80,9 +80,10 @@ class UrlController extends Controller
             abort(403);
         }
 
+        $url->clicks()->delete();
         $url->delete();
 
-        return redirect()->route('dashboard.index')->with('success', 'Ссылка успешно удалена!');
+        return redirect()->route('dashboard')->with('success', 'Ссылка успешно удалена!');
     }
 
     public function run(string $code)
@@ -116,7 +117,7 @@ class UrlController extends Controller
             'user_agent' => request()->userAgent(),
         ]);
 
-        return $url->is_commercia ?
+        return !$url->is_commercial ?
             redirect()->away($url->original_url) :
             view('dashboard.commercial', [
                 'originalUrl' => $url->original_url,
