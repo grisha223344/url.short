@@ -4,26 +4,20 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class UrlClick extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'short_url_id',
+        'url_id',
         'ip_address',
         'user_agent',
-        'referer'
     ];
 
-    public $timestamps = false;
-
-    protected $casts = [
-        'clicked_at' => 'datetime',
-    ];
-
-    public function shortUrl()
+    public function url(): BelongsTo
     {
-        return $this->belongsTo(ShortUrl::class);
+        return $this->belongsTo(Url::class, 'url_id', 'id');
     }
 }

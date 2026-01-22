@@ -10,16 +10,12 @@ return new class extends Migration
     {
         Schema::create('url_clicks', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('short_url_id')->constrained()->onDelete('cascade');
+            $table->foreignId('url_id');
             $table->string('ip_address', 45)->nullable();
             $table->text('user_agent')->nullable();
-            $table->text('referer')->nullable();
-            $table->timestamp('clicked_at')->useCurrent();
+            $table->timestamps();
 
-            // Индексы для оптимизации запросов
-            $table->index('short_url_id');
-            $table->index('clicked_at');
-            $table->index(['short_url_id', 'clicked_at']);
+            $table->foreign('url_id')->references('id')->on('urls');
         });
     }
 

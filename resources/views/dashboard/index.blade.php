@@ -3,127 +3,134 @@
 @section('title', 'Дашборд')
 
 @section('content')
-    <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-900">Дашборд</h1>
-        <p class="text-gray-600 mt-2">Обзор вашей активности и статистики</p>
-    </div>
+    <div class="dashboard-page">
+        <h1 class="dashboard-page__title">Дашборд</h1>
+        <p class="dashboard-page__desc">Обзор вашей активности и статистики</p>
 
-    <!-- Статистика -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-            <div class="flex items-center">
-                <div class="flex-shrink-0 bg-indigo-100 rounded-md p-3">
-                    <i class="fas fa-link text-indigo-600 text-xl"></i>
+        <div class="dashboard-stat">
+            <div class="dashboard-stat-item">
+                <div class="dashboard-stat-item__icon" style="background:rgb(224 231 255);color:rgb(79 70 229)">
+                    <i class="fas fa-link"></i>
                 </div>
-                <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-600">Всего ссылок</p>
-                    <p class="text-2xl font-semibold text-gray-900">{{ $totalUrls }}</p>
+                <div class="dashboard-stat-item__info">
+                    <p class="dashboard-stat-item__title">Всего ссылок</p>
+                    <p class="dashboard-stat-item__val">{{ $totalUrls }}</p>
                 </div>
             </div>
-        </div>
-
-        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-            <div class="flex items-center">
-                <div class="flex-shrink-0 bg-green-100 rounded-md p-3">
-                    <i class="fas fa-check-circle text-green-600 text-xl"></i>
+            <div class="dashboard-stat-item">
+                <div class="dashboard-stat-item__icon" style="background:rgb(220 252 231);color:rgb(22 163 74)">
+                    <i class="fas fa-check-circle"></i>
                 </div>
-                <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-600">Активных ссылок</p>
-                    <p class="text-2xl font-semibold text-gray-900">{{ $activeUrls }}</p>
+                <div class="dashboard-stat-item__info">
+                    <p class="dashboard-stat-item__title">Активных ссылок</p>
+                    <p class="dashboard-stat-item__val">{{ $activeUrls }}</p>
                 </div>
             </div>
-        </div>
-
-        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-            <div class="flex items-center">
-                <div class="flex-shrink-0 bg-blue-100 rounded-md p-3">
+            <div class="dashboard-stat-item">
+                <div class="dashboard-stat-item__icon" style="background:rgb(219 234 254);color:rgb(37 99 235)">
                     <i class="fas fa-mouse-pointer text-blue-600 text-xl"></i>
                 </div>
-                <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-600">Всего переходов</p>
-                    <p class="text-2xl font-semibold text-gray-900">{{ $totalClicks }}</p>
+                <div class="dashboard-stat-item__info">
+                    <p class="dashboard-stat-item__title">Всего переходов</p>
+                    <p class="dashboard-stat-item__val">{{ $totalClicks }}</p>
                 </div>
             </div>
         </div>
+
     </div>
 
-    <!-- Быстрые действия -->
-    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 mb-8">
-        <h2 class="text-xl font-semibold text-gray-900 mb-4">Быстрые действия</h2>
-        <div class="flex flex-wrap gap-4">
-            <a href="{{ route('urls.create') }}"
-               class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:border-indigo-900 focus:ring ring-indigo-300 disabled:opacity-25 transition ease-in-out duration-150">
-                <i class="fas fa-plus mr-2"></i>Создать ссылку
-            </a>
-            <a href="{{ route('urls.index') }}"
-               class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:ring ring-blue-200 active:text-gray-800 active:bg-gray-50 disabled:opacity-25 transition ease-in-out duration-150">
-                <i class="fas fa-list mr-2"></i>Все ссылки
-            </a>
-        </div>
-    </div>
-
-    <!-- Последние ссылки -->
-    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-        <div class="p-6">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-xl font-semibold text-gray-900">Последние ссылки</h2>
-                <a href="{{ route('urls.index') }}" class="text-indigo-600 hover:text-indigo-900 text-sm font-medium">
-                    Показать все
-                </a>
+    <div class="links-content">
+        <div class="links-content-top">
+            <div class="links-content-top__info">
+                <h2 class="links-content__title">Мои ссылки</h2>
+                <p class="links-content__desc">Все созданные вами короткие ссылки</p>
             </div>
+            <div class="links-content-top__right">
+                <a class="links-content-top__new" href="{{ route('urls.create') }}"><i class="fas fa-plus mr-2"></i>Новая ссылка</a>
+            </div>
+        </div>
 
-            @if($recentUrls->count() > 0)
-                <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
+        <div class="links-table-wrap">
+            @if($urlList->count() > 0)
+                <table class="links-table">
+                    <thead class="links-table__head">
                         <tr>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Короткая ссылка</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Оригинальный URL</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Переходы</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Создана</th>
+                            <th class="links-table__head-th">Короткая ссылка</th>
+                            <th class="links-table__head-th">Переходы</th>
+                            <th class="links-table__head-th">Создана</th>
+                            <th class="links-table__head-th">Срок жизни</th>
+                            <th class="links-table__head-th">Действия</th>
                         </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                        @foreach($recentUrls as $url)
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm font-medium text-gray-900">
-                                        <a href="{{ $url->short_url }}" target="_blank" class="text-indigo-600 hover:text-indigo-900">
-                                            {{ $url->short_url }}
-                                        </a>
+                    </thead>
+                    <tbody class="links-table__body">
+                    @foreach($urlList as $url)
+                        <tr>
+                            <td class="links-table__body-td">
+                                <div class="links-table-main-info">
+                                    <div class="links-table-main-info__link">
                                         @if($url->is_commercial)
-                                            <span class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                    Реклама
-                                </span>
+                                            <a href="{{ config('app.url') . '/' . $url->short_code }}" target="_blank" class="commerce-url">
+                                                <i class="fas fa-ad mr-1"></i>{{ config('app.url') . '/' . $url->short_code }}
+                                            </a>
+                                            <span class="commerce-icon">
+                                                <i class="fas fa-ad mr-1"></i>Реклама
+                                            </span>
+                                        @else
+                                            <a href="{{ config('app.url') . '/' . $url->short_code }}" target="_blank" class="url">
+                                                {{ config('app.url') . '/' . $url->short_code }}
+                                            </a>
                                         @endif
                                     </div>
-                                    <div class="text-sm text-gray-500">
-                                        <a href="{{ route('urls.stats', $url) }}" class="hover:text-indigo-600">
-                                            Статистика
+                                    <div class="links-table-main-info__original-url">{{ Str::limit($url->original_url, 60) }}</div>
+                                    <div class="links-table-main-info__link-stat">
+                                        <a href="{{ route('urls.stats', $url) }}">
+                                            <i class="fas fa-chart-bar mr-1"></i>Статистика
                                         </a>
                                     </div>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <div class="text-sm text-gray-900 truncate max-w-xs">{{ $url->original_url }}</div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="text-sm text-gray-900">{{ $url->total_clicks }}</span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    {{ $url->created_at->format('d.m.Y H:i') }}
-                                </td>
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
-                </div>
+                                </div>
+                            </td>
+                            <td class="links-table__body-td">
+                                <div class="">{{ $url->clicks->count() }}</div>
+                            </td>
+                            <td class="links-table__body-td">
+                                <span class="">{{ $url->created_at->format('d.m.Y H:i') }}</span>
+                            </td>
+                            <td class="links-table__body-td">
+                                @if($url->expires_at)
+                                    @if($url->isExpired())
+                                        <span class="">
+                                            Истекла {{ $url->expires_at->format('d.m.Y') }}
+                                        </span>
+                                    @else
+                                        <span class="">
+                                            До {{ $url->expires_at->format('d.m.Y') }}
+                                        </span>
+                                    @endif
+                                @else
+                                    <span class="">Бессрочная</span>
+                                @endif
+                            </td>
+                            <td class="links-table__body-td">
+                                <div class="links-table__actions">
+                                    <a href="{{ route('urls.stats', $url) }}" class="links-table__link-stat" title="Статистика">
+                                        <i class="fas fa-chart-bar"></i>
+                                    </a>
+                                    <form action="{{ route('urls.destroy', $url) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="links-table__delete" title="Удалить">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
             @else
-                <div class="text-center py-8">
-                    <i class="fas fa-link text-4xl text-gray-300 mb-4"></i>
-                    <p class="text-gray-500">У вас пока нет созданных ссылок</p>
-                    <a href="{{ route('urls.create') }}" class="mt-2 inline-block text-indigo-600 hover:text-indigo-900 font-medium">
-                        Создайте свою первую ссылку
-                    </a>
+                <div class="links-table-empty">
+                    <p class="links-table-empty__title">У вас пока нет созданных ссылок</p>
                 </div>
             @endif
         </div>

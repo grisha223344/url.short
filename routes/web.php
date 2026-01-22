@@ -3,21 +3,17 @@
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\ShortUrlController;
-use App\Http\Controllers\CommercialRedirectController;
-use App\Http\Controllers\Web\DashboardController;
-use App\Http\Controllers\Web\UrlController;
+use App\Http\Controllers\UrlController;
 
-// Главная страница (публичная)
+// Главная страница
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::middleware(['auth'])->group(function () {
 
     // Веб-интерфейс для управления ссылками
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/urls', [UrlController::class, 'index'])->name('urls.index');
+    Route::get('/dashboard', [UrlController::class, 'dashboard'])->name('dashboard');
     Route::get('/urls/create', [UrlController::class, 'create'])->name('urls.create');
-    Route::post('/urls', [UrlController::class, 'store'])->name('urls.store');
+    Route::post('/urls/store', [UrlController::class, 'store'])->name('urls.store');
     Route::get('/urls/{url}/stats', [UrlController::class, 'stats'])->name('urls.stats');
     Route::delete('/urls/{url}', [UrlController::class, 'destroy'])->name('urls.destroy');
 
@@ -34,14 +30,5 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [AuthController::class, 'login'])->name('login');
 });
 
-// API эндпоинты (для AJAX и внешних клиентов)
-Route::prefix('api')->group(function () {
-    Route::post('/shorten', [ShortUrlController::class, 'shorten']);
-});
-
-// Коммерческие ссылки (с ограничением частоты запросов)
-Route::get('/commercial/{code}', [CommercialRedirectController::class, 'showRedirectPage'])->name('commercial.show')->middleware('throttle:30,1');
-Route::get('/commercial-redirect/{code}', [CommercialRedirectController::class, 'performRedirect'])->name('commercial.redirect');
-
 // Редирект по коротким ссылкам
-Route::get('/{code}', [ShortUrlController::class, 'run']);
+Route::get('/{code}', [UrlController::class, 'run']);
